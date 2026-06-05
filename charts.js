@@ -258,7 +258,22 @@ function updateChartsFromData(data) {
   }
 
   // --- 2. Atualizar Distribuição de Status de Projetos ---
-  if (data.projetos && data.projetos.length > 1) {
+  if (data.status_projetos && data.status_projetos.length > 1) {
+    const labels = [];
+    const values = [];
+
+    for (let i = 1; i < data.status_projetos.length; i++) {
+      const row = data.status_projetos[i];
+      if (row && row[0]) {
+        labels.push(row[0]);
+        values.push(parseBrazilianNumber(row[1]));
+      }
+    }
+
+    chartStatus.data.labels = labels;
+    chartStatus.data.datasets[0].data = values;
+    chartStatus.update();
+  } else if (data.projetos && data.projetos.length > 1) {
     const statusContagem = {};
     
     for (let i = 1; i < data.projetos.length; i++) {

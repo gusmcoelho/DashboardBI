@@ -6,7 +6,8 @@ var URL_PLANILHA = "https://docs.google.com/spreadsheets/d/" + SPREADSHEET_ID + 
 var dadosPlanilha = {
   clientes: [],
   projetos: [],
-  faturamento: []
+  faturamento: [],
+  status_projetos: []
 };
 
 // Filtro selecionado na tela
@@ -46,6 +47,7 @@ async function buscarDadosDoGoogleSheets() {
     var abaClientes = workbook.Sheets["clientes"];
     var abaProjetos = workbook.Sheets["projetos"];
     var abaFaturamento = workbook.Sheets["faturamento"];
+    var abaStatusProjetos = workbook.Sheets["status_projetos"];
 
     if (!abaClientes || !abaProjetos || !abaFaturamento) {
       throw new Error("Verifique se as abas 'clientes', 'projetos' e 'faturamento' existem no Google Sheets.");
@@ -60,6 +62,14 @@ async function buscarDadosDoGoogleSheets() {
     dadosPlanilha.clientes = filtrarLinhasVazias(rawClientes);
     dadosPlanilha.projetos = filtrarLinhasVazias(rawProjetos);
     dadosPlanilha.faturamento = filtrarLinhasVazias(rawFaturamento);
+
+    // Carrega aba de status de projetos opcionalmente
+    if (abaStatusProjetos) {
+      var rawStatusProjetos = XLSX.utils.sheet_to_json(abaStatusProjetos, { header: 1, defval: "" });
+      dadosPlanilha.status_projetos = filtrarLinhasVazias(rawStatusProjetos);
+    } else {
+      dadosPlanilha.status_projetos = [];
+    }
 
     console.log("Dados carregados com sucesso!", dadosPlanilha);
 
