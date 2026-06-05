@@ -25,13 +25,11 @@ document.addEventListener("DOMContentLoaded", function() {
   
   if (isDark) {
     document.body.classList.add("dark-mode");
-    var icon = document.getElementById("dark-icon");
-    var text = document.getElementById("dark-text");
-    if (icon && text) {
+    var icons = document.querySelectorAll(".dark-icon");
+    icons.forEach(function(icon) {
       icon.setAttribute("data-lucide", "sun");
-      text.textContent = "Modo Claro";
-      lucide.createIcons();
-    }
+    });
+    lucide.createIcons();
   }
 
   // Iniciar os gráficos do Chart.js vazios
@@ -410,19 +408,15 @@ function toggleDarkMode() {
   var isDark = document.body.classList.toggle("dark-mode");
   localStorage.setItem("theme", isDark ? "dark" : "light");
   
-  var icon = document.getElementById("dark-icon");
-  var text = document.getElementById("dark-text");
-  
-  if (icon && text) {
+  var icons = document.querySelectorAll(".dark-icon");
+  icons.forEach(function(icon) {
     if (isDark) {
       icon.setAttribute("data-lucide", "sun");
-      text.textContent = "Modo Claro";
     } else {
       icon.setAttribute("data-lucide", "moon");
-      text.textContent = "Modo Escuro";
     }
-    lucide.createIcons();
-  }
+  });
+  lucide.createIcons();
 
   // Atualiza as cores do Chart.js dinamicamente se a função estiver disponível
   if (typeof updateChartThemes === "function") {
