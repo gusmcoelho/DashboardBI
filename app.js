@@ -43,11 +43,11 @@ async function buscarDadosDoGoogleSheets() {
     // Lê o workbook usando a biblioteca SheetJS (XLSX)
     var workbook = XLSX.read(dadosExcel, { type: "array" });
 
-    // Pega os dados das abas obrigatórias
-    var abaClientes = workbook.Sheets["clientes"];
-    var abaProjetos = workbook.Sheets["projetos"];
-    var abaFaturamento = workbook.Sheets["faturamento"];
-    var abaStatusProjetos = workbook.Sheets["status_projetos"];
+    // Pega os dados das abas de forma case-insensitive
+    var abaClientes = getSheetCaseInsensitive(workbook, "clientes");
+    var abaProjetos = getSheetCaseInsensitive(workbook, "projetos");
+    var abaFaturamento = getSheetCaseInsensitive(workbook, "faturamento");
+    var abaStatusProjetos = getSheetCaseInsensitive(workbook, "status_projetos");
 
     if (!abaClientes || !abaProjetos || !abaFaturamento) {
       throw new Error("Verifique se as abas 'clientes', 'projetos' e 'faturamento' existem no Google Sheets.");
@@ -374,4 +374,17 @@ function toggleSidebar() {
       lucide.createIcons();
     }
   }
+}
+
+// Busca uma aba na planilha de forma case-insensitive
+function getSheetCaseInsensitive(workbook, name) {
+  if (!workbook || !workbook.SheetNames) return null;
+  var sheets = workbook.SheetNames;
+  var target = name.toLowerCase();
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].toLowerCase() === target) {
+      return workbook.Sheets[sheets[i]];
+    }
+  }
+  return null;
 }
