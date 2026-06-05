@@ -25,6 +25,21 @@ function parseBrazilianNumber(val) {
   return parseFloat(cleanVal) || 0;
 }
 
+// Função utilitária para converter e normalizar valores de porcentagem (decimais ou com o caractere %)
+function parsePercentage(val) {
+  if (val === undefined || val === null) return 0;
+  var cleanVal = String(val).trim();
+  if (cleanVal.includes('%')) {
+    cleanVal = cleanVal.replace(/%/g, '');
+    return parseFloat(cleanVal) || 0;
+  }
+  var num = parseFloat(cleanVal) || 0;
+  if (num > 0 && num <= 1.0) {
+    num = num * 100;
+  }
+  return num;
+}
+
 // Inicializa os gráficos vazios ou com dados padrão
 function initCharts() {
   const ctxFaturamento = document.getElementById('chart-faturamento-mensal').getContext('2d');
@@ -243,17 +258,33 @@ function updateChartsFromData(data) {
   }
 
   // --- 2. Atualizar Distribuição de Status de Projetos ---
-  if (data.status_projetos && data.status_projetos.length > 1) {
-    const labels = [];
-    const values = [];
-
-    for (let i = 1; i < data.status_projetos.length; i++) {
-      const row = data.status_projetos[i];
+  if (data.projetos && data.projetos.length > 1) {
+    const statusContagem = {};
+    
+    for (let i = 1; i < data.projetos.length; i++) {
+      const row = data.projetos[i];
       if (row && row[0]) {
-        labels.push(row[0]);
-        values.push(parseBrazilianNumber(row[1]));
+        let status = "";
+        // Se houver uma 4ª coluna para Status (índice 3) preenchida
+        if (row[3] && row[3].trim() !== "") {
+          status = row[3].trim();
+        } else {
+          // Fallback: calcula o status com base no progresso do projeto
+          const progress = parsePercentage(row[2]);
+          if (progress === 100) {
+            status = "Concluído";
+          } else if (progress < 40) {
+            status = "Iniciando";
+          } else {
+            status = "Em Progresso";
+          }
+        }
+        statusContagem[status] = (statusContagem[status] || 0) + 1;
       }
     }
+
+    const labels = Object.keys(statusContagem);
+    const values = Object.values(statusContagem);
 
     chartStatus.data.labels = labels;
     chartStatus.data.datasets[0].data = values;
