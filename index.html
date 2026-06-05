@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intergesão BI Dashboard — Google Sheets Real-Time</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Ícones Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Chart.js para os gráficos BI -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <!-- Biblioteca SheetJS para ler planilhas do Google no Navegador (CORS XLSX) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- Estilos customizados -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- SIDEBAR (Menu Lateral com filtros) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i data-lucide="trending-up" class="logo-icon"></i>
+          <div class="logo-text">
+            <h2>intergesão</h2>
+            <span>Business Intelligence</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Navegação de Views -->
+      <nav class="sidebar-nav">
+        <button class="nav-btn active" id="btn-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard de BI</span>
+        </button>
+        <button class="nav-btn" id="btn-open-sheets" onclick="abrirPlanilhaGoogle()">
+          <i data-lucide="external-link"></i>
+          <span>Abrir Planilha Google</span>
+        </button>
+      </nav>
+      
+      <!-- Divisor -->
+      <div class="sidebar-divider"></div>
+      
+      <!-- Filtros (Estilo Power BI) -->
+      <div class="sidebar-filters">
+        <h3>Filtros de Visão</h3>
+
+        <div class="filter-group">
+          <label for="filter-categoria">Categoria do Projeto</label>
+          <div class="select-wrapper">
+            <select id="filter-categoria" onchange="aplicarFiltros()">
+              <option value="Todos" selected>Todos os Projetos</option>
+              <option value="Site">Sites / Web</option>
+              <option value="Nuvem">Infraestrutura / Nuvem</option>
+              <option value="Marketing">Marketing / Tráfego</option>
+              <option value="App">Mobile / Apps</option>
+            </select>
+            <i data-lucide="chevron-down" class="select-arrow"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rodapé da Sidebar (Status de Sincronização) -->
+      <div class="sidebar-footer">
+        <div class="connection-status connected" id="sync-status">
+          <span class="status-indicator"></span>
+          <span class="status-text">Sincronização Ativa</span>
+        </div>
+        <div class="users-counter" style="margin-top: 6px;">
+          <i data-lucide="refresh-cw" id="sync-spin-icon" style="width: 13px; height: 13px;"></i>
+          <span id="sheets-sync-status" style="font-size: 11px; font-weight: 500;">Iniciando conexão...</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="main-content">
+      
+      <!-- Header do Painel -->
+      <header class="main-header">
+        <div class="header-title">
+          <h1>DASHBOARD DE MÉTRICAS DA EMPRESA</h1>
+          <p>Consumindo dados diretamente do Google Sheets de forma dinâmica (Client-Side).</p>
+        </div>
+        <div class="header-actions">
+          <div class="last-sync-time" id="dashboard-last-sync">
+            <i data-lucide="refresh-cw"></i>
+            <span>Sincronizando...</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- VIEW DO DASHBOARD -->
+      <section id="view-dashboard" class="content-view active">
+        
+        <!-- CARDS DE MÉTRICAS -->
+        <div class="metrics-grid">
+          
+          <div class="metric-card">
+            <div class="metric-info">
+              <span class="metric-label">Faturamento Mensal</span>
+              <h2 class="metric-value" id="kpi-faturamento">Carregando...</h2>
+            </div>
+            <div class="metric-icon-box teal">
+              <i data-lucide="dollar-sign"></i>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <span class="metric-label">Clientes Ativos</span>
+              <h2 class="metric-value" id="kpi-clientes">Carregando...</h2>
+            </div>
+            <div class="metric-icon-box orange">
+              <i data-lucide="users"></i>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <span class="metric-label">Leads Captados</span>
+              <h2 class="metric-value" id="kpi-leads">Carregando...</h2>
+            </div>
+            <div class="metric-icon-box blue">
+              <i data-lucide="target"></i>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <span class="metric-label">Projetos Ativos</span>
+              <h2 class="metric-value" id="kpi-projetos">Carregando...</h2>
+            </div>
+            <div class="metric-icon-box purple">
+              <i data-lucide="folder-git-2"></i>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-info">
+              <span class="metric-label">Tarefas Concluídas</span>
+              <h2 class="metric-value" id="kpi-tarefas">Carregando...</h2>
+            </div>
+            <div class="metric-icon-box green">
+              <i data-lucide="check-circle-2"></i>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- GRÁFICOS DO DASHBOARD (Grid de Layout) -->
+        <div class="charts-grid">
+          
+          <!-- Faturamento Mensal (Linha) -->
+          <div class="chart-container col-span-2">
+            <div class="chart-header">
+              <h3>Faturamento Mensal vs Leads</h3>
+              <span class="chart-subtitle">Evolução do faturamento em R$ no ano corrente</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="chart-faturamento-mensal"></canvas>
+            </div>
+          </div>
+
+          <!-- Status de Projetos (Rosca / Donut) -->
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Distribuição de Status</h3>
+              <span class="chart-subtitle">Status dos projetos na esteira</span>
+            </div>
+            <div class="chart-body donut-body">
+              <canvas id="chart-status-projetos"></canvas>
+            </div>
+          </div>
+
+          <!-- Top 5 Clientes (Barra Horizontal) -->
+          <div class="chart-container">
+            <div class="chart-header">
+              <h3>Faturamento por Cliente (Top 5)</h3>
+              <span class="chart-subtitle">Maiores faturamentos individuais</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="chart-top-clientes"></canvas>
+            </div>
+          </div>
+
+          <!-- Projetos e Orçamentos -->
+          <div class="chart-container col-span-2">
+            <div class="chart-header">
+              <h3>Orçamento e Progresso dos Projetos</h3>
+              <span class="chart-subtitle">Lista dinâmica vinda diretamente da planilha</span>
+            </div>
+            <div class="chart-body table-body">
+              <table class="dashboard-table" id="dashboard-projects-table">
+                <thead>
+                  <tr>
+                    <th>Projeto</th>
+                    <th>Orçamento</th>
+                    <th>Progresso</th>
+                    <th>Status Visual</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Preenchido dinamicamente via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,722 @@
+/* Reset e Variáveis Globais */
+:root {
+  --primary-teal: #00B0C8;
+  --primary-teal-dark: #007A8C;
+  --primary-teal-light: #E0F7FA;
+  --sidebar-bg: #00838F; /* Teal sólido premium */
+  --sidebar-active: #005662;
+  --sidebar-hover: #0097A7;
+  
+  --bg-main: #F4F6F9; /* Cinza claro estilo Power BI */
+  --bg-card: #FFFFFF;
+  --text-dark: #1E293B;
+  --text-muted: #64748B;
+  --border-color: #E2E8F0;
+  
+  /* Cores KPI */
+  --kpi-teal: #00B0C8;
+  --kpi-orange: #F97316;
+  --kpi-blue: #3B82F6;
+  --kpi-purple: #8B5CF6;
+  --kpi-green: #10B981;
+  
+  /* Sombra Premium */
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --sidebar-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
+  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-dark);
+  overflow-hidden: scroll;
+  height: 100vh;
+}
+
+/* Layout Container */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* SIDEBAR ESTILO POWER BI */
+.sidebar {
+  width: 280px;
+  background-color: var(--sidebar-bg);
+  box-shadow: var(--sidebar-shadow);
+  display: flex;
+  flex-direction: column;
+  color: #FFFFFF;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  color: #FFFFFF;
+}
+
+.logo-text h2 {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.logo-text span {
+  font-size: 11px;
+  opacity: 0.8;
+  display: block;
+}
+
+.sidebar-nav {
+  padding: 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 12px 16px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+  text-align: left;
+}
+
+.nav-btn:hover {
+  background-color: var(--sidebar-hover);
+  color: #FFFFFF;
+}
+
+.nav-btn.active {
+  background-color: var(--sidebar-active);
+  color: #FFFFFF;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 10px 20px;
+}
+
+.sidebar-filters {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.sidebar-filters h3 {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+
+.filter-group label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 10px 14px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 14px;
+  appearance: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.select-wrapper select:focus {
+  outline: none;
+  border-color: #FFFFFF;
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.select-wrapper select option {
+  background-color: var(--sidebar-bg);
+  color: #FFFFFF;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.connection-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #EF4444;
+}
+
+.connected .status-indicator {
+  background-color: #10B981;
+  box-shadow: 0 0 8px #10B981;
+}
+
+.users-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.users-counter i {
+  width: 14px;
+  height: 14px;
+}
+
+/* CONTEÚDO PRINCIPAL */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+/* HEADER PRINCIPAL */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 16px;
+}
+
+.header-title h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+}
+
+.header-title p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.last-sync-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.last-sync-time i {
+  width: 14px;
+  height: 14px;
+}
+
+/* VIEWS CONTROLLER */
+.content-view {
+  display: none;
+  flex-direction: column;
+  gap: 24px;
+  animation: fadeIn 0.4s ease;
+}
+
+.content-view.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* CARDS DE MÉTRICAS */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.metric-card {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--border-color);
+  border-top: 4px solid var(--primary-teal); /* Detalhe Power BI */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.metric-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.metric-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.metric-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+}
+
+.metric-icon-box.teal { background-color: var(--kpi-teal); }
+.metric-icon-box.orange { background-color: var(--kpi-orange); }
+.metric-icon-box.blue { background-color: var(--kpi-blue); }
+.metric-icon-box.purple { background-color: var(--kpi-purple); }
+.metric-icon-box.green { background-color: var(--kpi-green); }
+
+.metric-icon-box i {
+  width: 20px;
+  height: 20px;
+}
+
+/* GRID DE GRÁFICOS */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.col-span-2 {
+  grid-column: span 2;
+}
+
+.chart-container {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-header {
+  margin-bottom: 16px;
+}
+
+.chart-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.chart-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+.chart-body {
+  position: relative;
+  flex-grow: 1;
+  min-height: 240px;
+}
+
+.donut-body {
+  min-height: 220px;
+  max-height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* TABELAS DO DASHBOARD */
+.table-body {
+  overflow-x: auto;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+}
+
+.dashboard-table th {
+  padding: 12px;
+  background-color: var(--bg-main);
+  font-weight: 600;
+  color: var(--text-dark);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.dashboard-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-dark);
+}
+
+.dashboard-table tbody tr:hover {
+  background-color: rgba(0, 176, 200, 0.03);
+}
+
+/* Barra de progresso na tabela */
+.progress-bar-container {
+  width: 100%;
+  background-color: #E2E8F0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.progress-bar {
+  background-color: var(--primary-teal);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+.status-badge.completado {
+  background-color: #D1FAE5;
+  color: #065F46;
+}
+
+.status-badge.em-progresso {
+  background-color: #DBEAFE;
+  color: #1E40AF;
+}
+
+.status-badge.atrasado {
+  background-color: #FEE2E2;
+  color: #991B1B;
+}
+
+/* PLANILHA EXCEL EM TEMPO REAL */
+.spreadsheet-container {
+  background-color: var(--bg-card);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 180px);
+  overflow: hidden;
+}
+
+.spreadsheet-toolbar {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: #F8FAFC;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.toolbar-left {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  font-family: inherit;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-smooth);
+}
+
+.btn i {
+  width: 14px;
+  height: 14px;
+}
+
+.btn-primary {
+  background-color: var(--primary-teal);
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-teal-dark);
+}
+
+.btn-danger {
+  background-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.btn-danger:hover {
+  background-color: #DC2626;
+}
+
+.btn-secondary {
+  background-color: #E2E8F0;
+  color: var(--text-dark);
+}
+
+.btn-secondary:hover {
+  background-color: #CBD5E1;
+}
+
+.sync-saving-indicator {
+  font-size: 13px;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+
+.sync-saving-indicator.saving {
+  color: var(--primary-teal-dark);
+}
+
+.sync-saving-indicator i {
+  width: 16px;
+  height: 16px;
+}
+
+/* Estilo da Tabela Excel */
+.spreadsheet-wrapper {
+  flex-grow: 1;
+  overflow: auto;
+  position: relative;
+}
+
+.table-scroll-container {
+  height: 100%;
+}
+
+.excel-table {
+  border-collapse: collapse;
+  font-family: inherit;
+  font-size: 14px;
+  min-width: 100%;
+  table-layout: auto;
+  background-color: #FFFFFF;
+}
+
+/* Cabeçalhos Excel */
+.excel-table th {
+  background-color: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  padding: 8px 12px;
+  font-weight: 600;
+  color: #475569;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  user-select: none;
+}
+
+.excel-table th.row-index-header {
+  width: 40px;
+  background-color: #E2E8F0;
+}
+
+/* Linha Índice */
+.excel-table td.row-index {
+  background-color: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  text-align: center;
+  font-weight: 600;
+  color: #475569;
+  user-select: none;
+  font-size: 12px;
+  width: 40px;
+}
+
+/* Células Editáveis */
+.excel-table td {
+  border: 1px solid #E2E8F0;
+  padding: 8px 12px;
+  outline: none;
+  transition: background-color 0.1s ease;
+  min-width: 100px;
+  word-break: break-all;
+}
+
+.excel-table td[contenteditable="true"] {
+  cursor: cell;
+}
+
+.excel-table td[contenteditable="true"]:focus {
+  background-color: var(--primary-teal-light);
+  border: 2px solid var(--primary-teal);
+  box-shadow: inset 0 0 0 1px var(--primary-teal);
+  padding: 7px 11px; /* Ajuste para não quebrar a largura com borda 2px */
+}
+
+.excel-table tr:hover td:not(.row-index) {
+  background-color: #F8FAFC;
+}
+
+/* Abas de Planilhas (Excel Tabs) */
+.spreadsheet-tabs {
+  background-color: #F1F5F9;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  padding: 0 10px;
+}
+
+.tab-item {
+  background: none;
+  border: none;
+  border-top: 3px solid transparent;
+  border-right: 1px solid var(--border-color);
+  padding: 10px 16px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: var(--transition-smooth);
+  border-bottom: 1px solid transparent;
+}
+
+.tab-item:hover {
+  background-color: #E2E8F0;
+  color: var(--text-dark);
+}
+
+.tab-item.active {
+  background-color: #FFFFFF;
+  color: var(--primary-teal-dark);
+  border-top-color: var(--primary-teal);
+  font-weight: 600;
+  border-bottom-color: transparent;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.02);
+}
+
+.tab-item i {
+  width: 14px;
+  height: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-span-2 {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    height: auto;
+  }
+  .main-content {
+    height: calc(100vh - 80px);
+  }
+}
