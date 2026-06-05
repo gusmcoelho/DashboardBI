@@ -25,6 +25,20 @@
 <body>
   <div class="app-container">
     
+    <!-- HEADER MOBILE -->
+    <header class="mobile-header">
+      <div class="logo">
+        <i data-lucide="trending-up" class="logo-icon"></i>
+        <div class="logo-text">
+          <h2>intergesão</h2>
+          <span>Business Intelligence</span>
+        </div>
+      </div>
+      <button class="menu-toggle-btn" id="menu-toggle-btn" onclick="toggleSidebar()">
+        <i data-lucide="menu"></i>
+      </button>
+    </header>
+
     <!-- SIDEBAR (Menu Lateral com filtros) -->
     <aside class="sidebar">
       <div class="sidebar-header">
@@ -83,6 +97,9 @@
         </div>
       </div>
     </aside>
+
+    <!-- OVERLAY DA SIDEBAR NO MOBILE -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- CONTEÚDO PRINCIPAL -->
     <main class="main-content">

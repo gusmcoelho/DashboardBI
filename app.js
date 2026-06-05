@@ -240,6 +240,12 @@ function aplicarFiltros() {
   var catSelect = document.getElementById("filter-categoria");
   categoriaFiltro = catSelect.value;
   atualizarTabelaProjetosDashboard();
+
+  // Fecha a sidebar no mobile após aplicar o filtro
+  var sidebar = document.querySelector(".sidebar");
+  if (sidebar && sidebar.classList.contains("active")) {
+    toggleSidebar();
+  }
 }
 
 // Abre o Google Sheets em nova aba
@@ -345,5 +351,27 @@ function mostrarStatusErro(mensagem) {
   }
   if (statusBox) {
     statusBox.className = "connection-status";
+  }
+}
+
+// Controla a visibilidade da sidebar em dispositivos móveis
+function toggleSidebar() {
+  var sidebar = document.querySelector(".sidebar");
+  if (!sidebar) return;
+  
+  sidebar.classList.toggle("active");
+  
+  var btn = document.getElementById("menu-toggle-btn");
+  if (btn) {
+    var icon = btn.querySelector("i");
+    if (icon) {
+      if (sidebar.classList.contains("active")) {
+        icon.setAttribute("data-lucide", "x");
+      } else {
+        icon.setAttribute("data-lucide", "menu");
+      }
+      // Re-renderiza o ícone do Lucide
+      lucide.createIcons();
+    }
   }
 }

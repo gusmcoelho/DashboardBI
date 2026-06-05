@@ -408,6 +408,10 @@ body {
   min-height: 240px;
 }
 
+.chart-body canvas {
+  width: 100% !important;
+}
+
 .donut-body {
   min-height: 220px;
   max-height: 240px;
@@ -698,6 +702,15 @@ body {
   height: 14px;
 }
 
+/* Mobile Header e Overlay (Ocultos por Padrão) */
+.mobile-header {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
 /* Responsividade */
 @media (max-width: 1200px) {
   .charts-grid {
@@ -709,14 +722,146 @@ body {
 }
 
 @media (max-width: 768px) {
+  /* Habilita Header Fixo Mobile */
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--sidebar-bg);
+    color: #FFFFFF;
+    padding: 0 16px;
+    height: 60px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .mobile-header .logo-text span {
+    font-size: 9px;
+  }
+
+  .menu-toggle-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #FFFFFF;
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+  }
+
+  .menu-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .menu-toggle-btn i {
+    width: 20px;
+    height: 20px;
+  }
+
+  /* Container Principal com Espaçamento para Header Fixo */
   .app-container {
     flex-direction: column;
+    padding-top: 60px;
+    height: 100vh;
+    overflow: hidden;
   }
+
+  /* Sidebar Estilo Drawer Deslizante */
   .sidebar {
-    width: 100%;
-    height: auto;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 280px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    transition: var(--transition-smooth);
+    z-index: 110;
+    box-shadow: none;
   }
+
+  .sidebar.active {
+    transform: translateX(0);
+    box-shadow: 5px 0 25px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar-header {
+    display: none; /* Oculta logo repetido dentro do menu mobile */
+  }
+
+  /* Overlay Escuro com Desfoque do Fundo */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 60px);
+    background-color: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 95;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .sidebar.active + .sidebar-overlay {
+    display: block;
+  }
+
+  /* Ajustes do Conteúdo Principal */
   .main-content {
-    height: calc(100vh - 80px);
+    height: calc(100vh - 60px);
+    padding: 16px;
+    overflow-y: auto;
+  }
+
+  .main-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+  }
+
+  .header-title h1 {
+    font-size: 20px;
+  }
+
+  /* Grid e Cards Ajustados para Telas Estreitas */
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .metric-card {
+    padding: 14px 16px;
+  }
+
+  .metric-value {
+    font-size: 20px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .chart-container {
+    padding: 16px;
+  }
+
+  .chart-header h3 {
+    font-size: 15px;
+  }
+
+  .chart-body {
+    min-height: 220px;
   }
 }
