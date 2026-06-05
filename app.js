@@ -18,6 +18,22 @@ document.addEventListener("DOMContentLoaded", function() {
   // Iniciar ícones da tela
   lucide.createIcons();
 
+  // Verifica preferência de tema salva ou preferência do sistema
+  var savedTheme = localStorage.getItem("theme");
+  var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  var isDark = savedTheme === "dark" || (!savedTheme && prefersDark);
+  
+  if (isDark) {
+    document.body.classList.add("dark-mode");
+    var icon = document.getElementById("dark-icon");
+    var text = document.getElementById("dark-text");
+    if (icon && text) {
+      icon.setAttribute("data-lucide", "sun");
+      text.textContent = "Modo Claro";
+      lucide.createIcons();
+    }
+  }
+
   // Iniciar os gráficos do Chart.js vazios
   initCharts();
 
@@ -387,4 +403,29 @@ function getSheetCaseInsensitive(workbook, name) {
     }
   }
   return null;
+}
+
+// Alterna entre os modos claro e escuro
+function toggleDarkMode() {
+  var isDark = document.body.classList.toggle("dark-mode");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  
+  var icon = document.getElementById("dark-icon");
+  var text = document.getElementById("dark-text");
+  
+  if (icon && text) {
+    if (isDark) {
+      icon.setAttribute("data-lucide", "sun");
+      text.textContent = "Modo Claro";
+    } else {
+      icon.setAttribute("data-lucide", "moon");
+      text.textContent = "Modo Escuro";
+    }
+    lucide.createIcons();
+  }
+
+  // Atualiza as cores do Chart.js dinamicamente se a função estiver disponível
+  if (typeof updateChartThemes === "function") {
+    updateChartThemes(isDark);
+  }
 }

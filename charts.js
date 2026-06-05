@@ -46,9 +46,13 @@ function initCharts() {
   const ctxStatus = document.getElementById('chart-status-projetos').getContext('2d');
   const ctxClientes = document.getElementById('chart-top-clientes').getContext('2d');
 
-  // Configuração padrão do Chart.js
+  // Configuração padrão do Chart.js baseado no tema
+  const isDark = document.body.classList.contains("dark-mode");
+  const labelColor = isDark ? '#94A3B8' : '#64748B';
+  const gridColor = isDark ? '#334155' : '#E2E8F0';
+
   Chart.defaults.font.family = "'Outfit', sans-serif";
-  Chart.defaults.color = '#64748B';
+  Chart.defaults.color = labelColor;
 
   // 1. Gráfico de Faturamento Mensal (Linha)
   chartFaturamento = new Chart(ctxFaturamento, {
@@ -121,7 +125,7 @@ function initCharts() {
           display: true,
           position: 'left',
           grid: {
-            color: '#E2E8F0'
+            color: gridColor
           },
           ticks: {
             callback: function(value) {
@@ -213,7 +217,7 @@ function initCharts() {
       scales: {
         x: {
           grid: {
-            color: '#E2E8F0'
+            color: gridColor
           },
           ticks: {
             callback: function(value) {
@@ -325,6 +329,33 @@ function updateChartsFromData(data) {
 
     chartClientes.data.labels = list.map(item => item.name);
     chartClientes.data.datasets[0].data = list.map(item => item.value);
+    chartClientes.update();
+  }
+}
+
+// Atualiza dinamicamente as cores dos eixos e grades dos gráficos
+function updateChartThemes(isDark) {
+  const labelColor = isDark ? '#94A3B8' : '#64748B';
+  const gridColor = isDark ? '#334155' : '#E2E8F0';
+
+  Chart.defaults.color = labelColor;
+
+  if (chartFaturamento) {
+    if (chartFaturamento.options.scales.x.ticks) chartFaturamento.options.scales.x.ticks.color = labelColor;
+    if (chartFaturamento.options.scales.y.ticks) chartFaturamento.options.scales.y.ticks.color = labelColor;
+    chartFaturamento.options.scales.y.grid.color = gridColor;
+    if (chartFaturamento.options.scales.y1.ticks) chartFaturamento.options.scales.y1.ticks.color = labelColor;
+    chartFaturamento.update();
+  }
+
+  if (chartStatus) {
+    chartStatus.update();
+  }
+
+  if (chartClientes) {
+    if (chartClientes.options.scales.x.ticks) chartClientes.options.scales.x.ticks.color = labelColor;
+    chartClientes.options.scales.x.grid.color = gridColor;
+    if (chartClientes.options.scales.y.ticks) chartClientes.options.scales.y.ticks.color = labelColor;
     chartClientes.update();
   }
 }
