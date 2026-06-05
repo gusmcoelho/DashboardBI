@@ -883,30 +883,44 @@ body {
   .chart-body {
     min-height: 220px;
   }
+}
+
 /* Botão de Alternância de Tema */
 .theme-toggle-btn {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background: none;
+  border: none;
   color: var(--text-dark);
   width: 38px;
   height: 38px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: var(--card-shadow);
-  transition: transform 0.2s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: transform 0.2s ease, color 0.3s ease, opacity 0.2s ease;
+  outline: none;
 }
 
 .theme-toggle-btn:hover {
-  background-color: var(--border-color);
-  transform: scale(1.08);
+  transform: scale(1.15);
+  opacity: 0.8;
 }
 
 .theme-toggle-btn i {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Remover focus outlines e anéis de foco do navegador */
+button:focus,
+button:active,
+.theme-toggle-btn:focus,
+.theme-toggle-btn:active,
+.theme-toggle-btn-mobile:focus,
+.theme-toggle-btn-mobile:active,
+.menu-toggle-btn:focus,
+.menu-toggle-btn:active {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* Animações Globais */
